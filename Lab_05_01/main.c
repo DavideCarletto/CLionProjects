@@ -5,7 +5,6 @@ typedef struct Squadra {
 } Squadra;
 
 void stampaCapolista(int matrice[20][20], int row, int col);
-
 int main() {
     FILE *fin;
     int matrice[20][20], row=0, col=0;

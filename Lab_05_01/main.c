@@ -8,7 +8,7 @@ void stampaCapolista(int matrice[20][20], int row, int col);
 
 int main() {
     FILE *fin;
-    int matrice[20][20], row, col;
+    int matrice[20][20], row=0, col=0;
 
     if ((fin = fopen("../mat.txt", "r")) == NULL) {
         printf("Error opening file...");

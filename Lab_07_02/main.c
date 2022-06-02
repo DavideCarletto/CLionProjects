@@ -23,7 +23,7 @@ void shellSort(int v[MAX], int n);
         return 2;
     }
 
-    leggiFile(fin2);
+    leggiFile(fin);
 
     return 0;
 }
@@ -131,7 +131,8 @@ void selectionSort(int A[], int N) {
 
 
 void shellSort(int A[], int N) {
-    int i, j, x, l=0, r=N-1, h=1,itEsterno, itInterno, itTot, scambi;
+    int i, j, x, l=0, r=N-1, h=1,itEsterno=0, itInterno=0, itTot=0, scambi=0;
+    printf("\n----- SHELL SORT -----\n");
     while (h < N/3)
         h = 3*h+1;
     while(h >= 1) {
@@ -141,9 +142,21 @@ void shellSort(int A[], int N) {
             while(j >= l + h && x < A[j-h]) {
                 A[j] = A[j-h];
                 j -=h;
+                scambi++;
+                itInterno++;
             }
+            printf("Iterazione %d numero di iterazioni: %d\n", i,itInterno);
+            itTot+=itInterno;
+            itInterno=0;
             A[j] = x;
+            itEsterno++;
         }
         h = h/3;
     }
+    itTot+=itEsterno;
+
+    printf("Numero totale di scambi: %d\n",scambi);
+    printf("Numero totale di iterazioni del ciclo esterno: %d\n",itEsterno);
+    printf("Numero totale di iterazioni: %d\n",itTot);
+    printf("---------------------------\n\n");
 }

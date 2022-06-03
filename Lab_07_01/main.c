@@ -7,39 +7,38 @@ typedef struct  {
     int x,y,base, altezza, area;
 }area_s;
 
-void leggiFile(FILE *fin, int mappa[MAX_R][MAX_C],int nr,int nc);
+void leggiMatrice(int mat[MAX_R][MAX_C], int maxR, int *nrp, int *ncp);
 void stampaMappa(int mappa[MAX_R][MAX_C],int nr,int nc);
 void trovaAree(int mappa[MAX_R][MAX_C],int nr, int nc,area_s elencoAree[MAX_R*MAX_C]);
 void stampaAreeMax(area_s altezzaMax, area_s baseMax, area_s areaMax);
 void trovaMax(area_s elencoAree[MAX_R*MAX_C], int countAree);
 
 int main() {
-    FILE *fin;
+
     int mappa[MAX_R][MAX_C],nr,nc;
     area_s elencoAree[MAX_R*MAX_C];
 
-    if((fin = fopen("../mappa.txt","r"))==NULL){
-        printf("Error opening file...");
-        return 1;
-    }
-
-    fscanf(fin,"%d%d",&nr,&nc);
-
-    leggiFile(fin,mappa,nr,nc);
+    leggiMatrice(mappa,MAX_R,&nr,&nc);
     stampaMappa(mappa,nr,nc);
     trovaAree(mappa,nr,nc,elencoAree);
 }
 
-void leggiFile(FILE *fin, int mappa[MAX_R][MAX_C],int nr,int nc){
-
-    for(int i=0; i<nr; i++){
-        for(int j=0; j < nc; j++){
-            if(!feof(fin))
-                fscanf(fin,"%d",&mappa[i][j]);
-        }
+void leggiMatrice(int mat[MAX_R][MAX_C], int maxR, int *nrp, int *ncp){
+    FILE *fin;
+    if((fin = fopen("../mappa.txt","r"))==NULL){
+        printf("Error opening file...");
     }
-
+    else {
+        fscanf(fin, "%d %d", nrp, ncp);
+        for (int i = 0; i < *nrp; ++i) {
+            for (int j = 0; j < *ncp; ++j) {
+                fscanf(fin, "%d", &mat[i][j]);
+            }
+        }
+        fclose(fin);
+    }
 }
+
 
 void trovaAree(int mappa[MAX_R][MAX_C],int nr, int nc, area_s elencoAree[MAX_R*MAX_C]){
     int countAree=0,x,y,m,termina;
@@ -49,36 +48,33 @@ void trovaAree(int mappa[MAX_R][MAX_C],int nr, int nc, area_s elencoAree[MAX_R*M
             if (mappa[i][j]==1) {
                 elencoAree[countAree].x=i;
                 elencoAree[countAree].y=j;
-                for (x=i; x<nr; x++) {
+                for (y=i; y<nr; y++) {
                     m=j;
-                    if (termina==1) {
+                    for (x=j; x<nc; x++) {
+                        if (mappa[y][x]==0 && y==m || y== nr-1 && x == nc-1) {
+                            termina=1;
+                            break;
+                        }
+                        if (mappa[y][x]==1) {
+                            if (y==i) {
+                                elencoAree[countAree].base++;
+                            }
+                            mappa[y][x]=0;
+                        }
+                    }
+                    elencoAree[countAree].altezza++;
+
+                    if (termina) {
                         elencoAree[countAree].area=(elencoAree[countAree].base)*(elencoAree[countAree].altezza);
                         termina=0;
                         break;
                     }
-                    for (y=j; y<nc; y++) {
-                        if (mappa[x][y]==0 && x==m) {
-                            termina=1;
-                            break;
-                        }
-                        if (mappa[x][y]==0) {
-                            break;
-                        }
-                        if (mappa[x][y]==1) {
-                            if (x==i) {
-                                elencoAree[countAree].base++;
-                            }
-                            mappa[x][y]=0;
-                        }
-                    }
-                    elencoAree[countAree].altezza++;
                 }
                 countAree++;
             }
         }
     }
     trovaMax(elencoAree, countAree);
-
 }
 void stampaMappa(int mappa[MAX_R][MAX_C],int nr,int nc){
     for(int i=0; i<nr; i++){

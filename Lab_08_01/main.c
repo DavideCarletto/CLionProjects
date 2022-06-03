@@ -48,29 +48,27 @@ void trovaAree(int mappa[MAX_R][MAX_C],int nr, int nc, area_s elencoAree[MAX_R*M
             if (mappa[i][j]==1) {
                 elencoAree[countAree].x=i;
                 elencoAree[countAree].y=j;
-                for (x=i; x<nr; x++) {
+                for (y=i; y<nr; y++) {
                     m=j;
-                    if (termina==1) {
+                    for (x=j; x<nc; x++) {
+                        if (mappa[y][x]==0 && y==m || y== nr-1 && x == nc-1) {
+                            termina=1;
+                            break;
+                        }
+                        if (mappa[y][x]==1) {
+                            if (y==i) {
+                                elencoAree[countAree].base++;
+                            }
+                            mappa[y][x]=0;
+                        }
+                    }
+                    elencoAree[countAree].altezza++;
+
+                    if (termina) {
                         elencoAree[countAree].area=(elencoAree[countAree].base)*(elencoAree[countAree].altezza);
                         termina=0;
                         break;
                     }
-                    for (y=j; y<nc; y++) {
-                        if (mappa[x][y]==0 && x==m) {
-                            termina=1;
-                            break;
-                        }
-                        if (mappa[x][y]==0) {
-                            break;
-                        }
-                        if (mappa[x][y]==1) {
-                            if (x==i) {
-                                elencoAree[countAree].base++;
-                            }
-                            mappa[x][y]=0;
-                        }
-                    }
-                    elencoAree[countAree].altezza++;
                 }
                 countAree++;
             }

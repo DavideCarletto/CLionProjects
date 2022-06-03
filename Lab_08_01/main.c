@@ -55,7 +55,6 @@ void trovaAree(int mappa[MAX_R][MAX_C],int nr, int nc, area_s elencoAree[MAX_R*M
                 elencoAree[countAree].area = b*h;
                 countAree++;
                 b=0;h=0;
-                stampaMappa(mappa,nr,nc);
             }
         }
     }

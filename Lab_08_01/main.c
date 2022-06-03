@@ -12,6 +12,7 @@ void stampaMappa(int mappa[MAX_R][MAX_C],int nr,int nc);
 void trovaAree(int mappa[MAX_R][MAX_C],int nr, int nc,area_s elencoAree[MAX_R*MAX_C]);
 void stampaAreeMax(area_s altezzaMax, area_s baseMax, area_s areaMax);
 void trovaMax(area_s elencoAree[MAX_R*MAX_C], int countAree);
+int riconosciRegione(int mappa[MAX_R][MAX_C],int nr, int nc,int,int c, int *b,int *h);
 
 int main() {
 
@@ -41,36 +42,20 @@ void leggiMatrice(int mat[MAX_R][MAX_C], int maxR, int *nrp, int *ncp){
 
 
 void trovaAree(int mappa[MAX_R][MAX_C],int nr, int nc, area_s elencoAree[MAX_R*MAX_C]){
-    int countAree=0,x,y,m,termina;
+    int countAree=0,b=0,h=0;
 
     for (int i=0; i<nr; i++) {
         for (int j=0; j<nc; j++) {
-            if (mappa[i][j]==1) {
+            if(riconosciRegione(mappa,nr,nc,i,j,&b,&h)){
+                printf("Riconosciuta regione con estremo in (%d %d), avente base %d e altezza %d\n ",i,j,b,h);
                 elencoAree[countAree].x=i;
                 elencoAree[countAree].y=j;
-                for (y=i; y<nr; y++) {
-                    m=j;
-                    for (x=j; x<nc; x++) {
-                        if (mappa[y][x]==0 && y==m || y== nr-1 && x == nc-1) {
-                            termina=1;
-                            break;
-                        }
-                        if (mappa[y][x]==1) {
-                            if (y==i) {
-                                elencoAree[countAree].base++;
-                            }
-                            mappa[y][x]=0;
-                        }
-                    }
-                    elencoAree[countAree].altezza++;
-
-                    if (termina) {
-                        elencoAree[countAree].area=(elencoAree[countAree].base)*(elencoAree[countAree].altezza);
-                        termina=0;
-                        break;
-                    }
-                }
+                elencoAree[countAree].base = b;
+                elencoAree[countAree].altezza = h;
+                elencoAree[countAree].area = b*h;
                 countAree++;
+                b=0;h=0;
+                stampaMappa(mappa,nr,nc);
             }
         }
     }
@@ -84,7 +69,32 @@ void stampaMappa(int mappa[MAX_R][MAX_C],int nr,int nc){
         printf("\n");
     }
 }
+int riconosciRegione(int mappa[MAX_R][MAX_C],int nr, int nc,int r,int c, int *b,int *h){
+        int x,y,m,termina=0;
+        if (mappa[r][c]==1) {
+            for (y=r; y<nr && !termina; y++) {
+                m=c;
+                for (x=c; x<nc; x++) {
+                    if ((mappa[y][x]==0 && mappa[y+1][m]==0 )|| (y== nr-1 && x == nc-1)) {
+                        termina=1;
+                        mappa[y][x]=0;
+                        break;
+                    }
+                    if (mappa[y][x]==1) {
+                        if (y==r) {
+                            ++*b;
+                        }
+                        mappa[y][x]=0;
+                    }
+                }
+                ++*h;
+            }
+            return 1;
+        }
+        else
+            return 0;
 
+}
 void trovaMax(area_s elencoAree[MAX_C*MAX_R],int countAree){
     int iMaxBase, iMaxAlt, iMaxArea,h=0,b=0,a=0;
 

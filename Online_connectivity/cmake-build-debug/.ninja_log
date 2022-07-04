@@ -1,0 +1,11 @@
+# ninja log v5
+0	143	6783884198393076	CMakeFiles/Online_connectivity.dir/main.c.obj	19d61a5921f5d9ee
+144	257	6783884199503074	Online_connectivity.exe	163bbde1b79de43d
+2	174	6783885410850059	CMakeFiles/Online_connectivity.dir/main.c.obj	19d61a5921f5d9ee
+174	268	6783885411780054	Online_connectivity.exe	163bbde1b79de43d
+2	102	6783886286242396	CMakeFiles/Online_connectivity.dir/main.c.obj	19d61a5921f5d9ee
+102	181	6783886287002395	Online_connectivity.exe	163bbde1b79de43d
+3	83	6783886360310998	CMakeFiles/Online_connectivity.dir/main.c.obj	19d61a5921f5d9ee
+83	173	6783886361171013	Online_connectivity.exe	163bbde1b79de43d
+2	100	6783886429615974	CMakeFiles/Online_connectivity.dir/main.c.obj	19d61a5921f5d9ee
+100	185	6783886430435982	Online_connectivity.exe	163bbde1b79de43d

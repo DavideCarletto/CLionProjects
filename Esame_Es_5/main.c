@@ -24,11 +24,11 @@ int main() {
 }
 
 int printReservation(FILE *fp) {
-    struct giorniSettimana elencoGiorni[7]; //modifica: da struct giorniSettimana [7]
+    struct giorniSettimana elencoGiorni[7];
 
     int max=0; // modifica: prima era dentro al while;
 
-    for(int i=0; i< 7; i++){ //modifica: non avevo ancora inizializzato
+    for(int i=0; i< 7; i++){ //modifica: aggiunta inizializzazione
         elencoGiorni[i].clienti=0;
         elencoGiorni[i].prenotazioni=0;
         elencoGiorni[i].media=0;
@@ -38,18 +38,18 @@ int printReservation(FILE *fp) {
         char giorno[50];
         int prenotazioni = 0;
 
-        fscanf(fp, "%s %d", giorno, &prenotazioni); //modifica: da giorno,prenotazioni
+        fscanf(fp, "%s %d", giorno, &prenotazioni);
 
         elencoGiorni[dayToNumber(giorno)].clienti += prenotazioni;
         elencoGiorni[dayToNumber(giorno)].prenotazioni++;
     }
         for (int i = 0; i < 7; i++) {
             if(elencoGiorni[i].prenotazioni>0)
-                elencoGiorni[i].media = (float)elencoGiorni[i].clienti/(float)elencoGiorni[i].prenotazioni;
+                elencoGiorni[i].media = (float)elencoGiorni[i].clienti/(float)elencoGiorni[i].prenotazioni; //modifica: aggiunta di questo controllo (nel caso in cui ci sia divisione per 0)
 
             printf("%s: %d prenotazioni, %.2f clienti in media per tavolo\n", numberToDay(i), elencoGiorni[i].prenotazioni,elencoGiorni[i].media);
             if (elencoGiorni[i].clienti > max)
-                max = elencoGiorni[i].clienti; //modifica; da max = elencoGiorni[i]
+                max = elencoGiorni[i].clienti; //modifica: da max = elencoGiorni[i]
         }
 
     return max;

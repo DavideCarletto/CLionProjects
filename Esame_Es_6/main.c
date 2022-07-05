@@ -20,7 +20,7 @@ int main() {
     return 0;
 }
 void analyseBill(FILE *fp, int *num){
-    struct  cliente clienti[MAX]; //modifica: da struct cliente[Max]
+    struct  cliente clienti[MAX];
 
     while(!feof(fp)){ //Modifica: da fp!= EOF
         char codice[50];
@@ -32,13 +32,13 @@ void analyseBill(FILE *fp, int *num){
             if (strcmp(clienti[i].codice, codice) == 0) {
                 clienti[i].saldo += cifra;
                 trovato = 1;
-                //c'era un *num++ di troppo
+                //precedentemente era presente un *num++, successivamente rimosso poichè la quantità di clienti non deve essere aumentata perchè si tratta di un utente già registrato.
             }
         }
             if(trovato==0){
                 strcpy(clienti[*num].codice,codice); // modifica: da clienti[*num].codice = codice
-                clienti[*num].saldo=cifra; // modifica: avevo messo =0
-                (*num)++; // non avevo messo le parentesi e avevo usato ancora count
+                clienti[*num].saldo=cifra;
+                (*num)++; // modifica: era incrementata la variabile count (sostituita in un secondo momento con num)
         }
     }
     float max=0;

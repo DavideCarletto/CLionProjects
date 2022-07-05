@@ -3,7 +3,7 @@
 
 void compressString(char *testo );
 int main() {
-    char string[50] = "aaaBBBBbbbbbAAAcbcba";
+    char string[50] = "abbabbbaAAAAAaCCaDDDeeeF";
     compressString(string);
     return 0;
 }

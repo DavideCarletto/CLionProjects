@@ -47,7 +47,7 @@ int printReservation(FILE *fp) {
             if(elencoGiorni[i].prenotazioni>0)
                 elencoGiorni[i].media = (float)elencoGiorni[i].clienti/(float)elencoGiorni[i].prenotazioni;
 
-            printf("%s:%d prenotazioni,%.2f clienti in media per tavolo\n", numberToDay(i), elencoGiorni[i].prenotazioni,elencoGiorni[i].media);
+            printf("%s: %d prenotazioni, %.2f clienti in media per tavolo\n", numberToDay(i), elencoGiorni[i].prenotazioni,elencoGiorni[i].media);
             if (elencoGiorni[i].clienti > max)
                 max = elencoGiorni[i].clienti; //modifica; da max = elencoGiorni[i]
         }

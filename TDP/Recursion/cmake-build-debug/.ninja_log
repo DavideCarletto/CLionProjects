@@ -1,0 +1,12 @@
+# ninja log v5
+0	72	6864474468924847	CMakeFiles/Recursion.dir/main.c.obj	e3d78be81e8b23c9
+73	170	6864474469864214	Recursion.exe	e9484b0bb1a891d8
+1	93	6864474661158760	CMakeFiles/Recursion.dir/main.c.obj	e3d78be81e8b23c9
+94	176	6864474661947778	Recursion.exe	e9484b0bb1a891d8
+1	74	6864474894994602	CMakeFiles/Recursion.dir/main.c.obj	e3d78be81e8b23c9
+74	149	6864474895768057	Recursion.exe	e9484b0bb1a891d8
+1	44	6864475054057478	CMakeFiles/Recursion.dir/main.c.obj	e3d78be81e8b23c9
+1	54	6864475097908875	CMakeFiles/Recursion.dir/main.c.obj	e3d78be81e8b23c9
+54	118	6864475098529626	Recursion.exe	e9484b0bb1a891d8
+1	133	6864524718365408	CMakeFiles/Recursion.dir/main.c.obj	e3d78be81e8b23c9
+134	297	6864524719976053	Recursion.exe	e9484b0bb1a891d8

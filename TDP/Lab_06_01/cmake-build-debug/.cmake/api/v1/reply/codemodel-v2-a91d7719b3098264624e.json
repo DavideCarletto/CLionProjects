@@ -49,8 +49,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "C:/Users/Davide/CLionProjects/Lab_06_01/cmake-build-debug",
-		"source" : "C:/Users/Davide/CLionProjects/Lab_06_01"
+		"build" : "C:/Users/Davide/CLionProjects/TDP/Lab_06_01/cmake-build-debug",
+		"source" : "C:/Users/Davide/CLionProjects/TDP/Lab_06_01"
 	},
 	"version" : 
 	{

@@ -17,22 +17,22 @@ typedef struct {
 } s_tratta;
 
 typedef enum {
-    stampa, o_data, o_codice, o_partenza, o_arrivo,o_cont, r_partenza, r_fine, r_err
+    stampa, o_data, o_codice, o_partenza, o_arrivo, r_partenza, r_fine, r_err
 }comando;
 
 int leggiFile(FILE *fin, s_tratta *elencoTratte);
-void menuTratte(s_tratta *elencoTratte, int dim);
+void menuTratte(s_tratta *elencoTratte, int dim, s_tratta *elencoPuntatori[4][MAX_T]);
 int leggiComando();
 void stampaTratte(s_tratta *elencoTratte, int dim);
-void ordina(s_tratta elencoTratte[], int dim, int orderBy);
+void stampaTratteP(s_tratta *elencoPuntatoriT[MAX_T],int dim);
+void ordina(s_tratta *elencoTratteP[MAX_T], int dim, int orderBy);
 int ricercaBinaria(s_tratta *elencoTratte, s_tratta *tratteTrovate,int l, int r, char* partenza);
 int ricercaLineare(s_tratta *elencoTratte, s_tratta *tratteTrovate, int dim, char* partenza);
-
 
 int main() {
 
     FILE *fin;
-    s_tratta *elencoTratte = (s_tratta*) malloc(sizeof(s_tratta)*MAX_T);
+    s_tratta elencoTratte[MAX_T], *elencoPuntatori[4][MAX_T];
 
     int dim;
 
@@ -42,9 +42,12 @@ int main() {
     }
 
     dim = leggiFile(fin, elencoTratte);
-    elencoTratte = (s_tratta*) realloc(elencoTratte,sizeof (s_tratta)*(dim));
 
-    menuTratte(elencoTratte,dim);
+    for(int i=0; i<dim;i++){
+        elencoPuntatori[0][i]= elencoPuntatori[1][i] = elencoPuntatori[2][i] = elencoPuntatori[3][i] = &elencoTratte[i];
+    }
+
+    menuTratte(elencoTratte,dim,elencoPuntatori);
 
     return 0;
 }
@@ -67,10 +70,11 @@ int leggiFile(FILE *fin, s_tratta *elencoTratte) {
     return dim;
 }
 
-void menuTratte(s_tratta *elencoTratte, int dim){
-    int continua = 1, comando =0, orderBy = 0,n = 0, ricerca =0, nOrd = 0, elencoOrdinamenti[4];
-    s_tratta *c_elencoTratte = malloc(dim*sizeof (*elencoTratte)), *tratteTrovate = malloc(dim*sizeof (*elencoTratte)), *elenco_punt_tratte[4][dim];
+void menuTratte(s_tratta *elencoTratte, int dim, s_tratta *elencoPuntatori[4][MAX_T]){
+    int continua = 1, comando =0, orderBy = 0,n = 0, ricerca =0;
+    s_tratta *c_elencoTratte = malloc(dim*sizeof (*elencoTratte)), *tratteTrovate = malloc(dim*sizeof (*elencoTratte));
     char *partenza = (char*)malloc(sizeof(char) * (MAX_S   + 1));
+
 
     while(continua){
         printf("CMD 'stampa': stampa le tratte\n"
@@ -78,7 +82,6 @@ void menuTratte(s_tratta *elencoTratte, int dim){
                "CMD 'o_codice': ordina le tratte per codice\n"
                "CMD 'o_partenza': ordina le tratte per stazione di partenza\n"
                "CMD 'o_arrivo': ordina le tratte per stazione di arrivo\n"
-               "CMD 'o_cont': ordina le tratte in base a più criteri di ordinamento\n"
                "CMD 'r_partenza': ricerca di una tratta per stazione di partenza\n"
                "CMD 'fine: per terminare\n\n");
 
@@ -90,32 +93,20 @@ void menuTratte(s_tratta *elencoTratte, int dim){
                 stampaTratte(elencoTratte,dim);
                 break;
             case o_data:
-                ordina(elencoTratte,dim, orderBy);
-                stampaTratte(elencoTratte,dim);
+                ordina(elencoPuntatori[orderBy],dim, orderBy);
+                stampaTratteP(elencoPuntatori[orderBy],dim);
                 break;
             case o_codice:
-                ordina(elencoTratte,dim, orderBy);
-                stampaTratte(elencoTratte,dim);
+                ordina(elencoPuntatori[orderBy],dim, orderBy);
+                stampaTratteP(elencoPuntatori[orderBy],dim);
                 break;
             case o_partenza:
-                ordina(elencoTratte,dim, orderBy);
-                stampaTratte(elencoTratte,dim);
+                ordina(elencoPuntatori[orderBy],dim, orderBy);
+                stampaTratteP(elencoPuntatori[orderBy],dim);
                 break;
             case o_arrivo:
-                ordina(elencoTratte,dim, orderBy);
-                stampaTratte(elencoTratte,dim);
-                break;
-            case o_cont:
-                printf("Inserire il numero di ordinamenti che si vuole fare:");
-                scanf("%d", &nOrd);
-                if(nOrd>4) {
-                    printf("il massimo di criteri di ordinamento è 4, si eseguiranno percio' 4 ordinamenti.");
-                    nOrd = 4;
-                }
-                for(int i =0; i<nOrd; i++){
-                    printf("Secondo quale criterio? (1-data, 2-codice, 3-partenza,4-arrivo)");
-                    scanf("%d",&elencoOrdinamenti[i]);
-                }
+                ordina(elencoPuntatori[orderBy],dim, orderBy);
+                stampaTratteP(elencoPuntatori[orderBy],dim);
                 break;
             case r_partenza:
                 memcpy(c_elencoTratte, elencoTratte, dim * sizeof(*elencoTratte));
@@ -155,7 +146,7 @@ void menuTratte(s_tratta *elencoTratte, int dim){
 
 int leggiComando(){
     char comando[MAX_S];
-    char tabella[8][MAX_S] = {"stampa", "o_data", "o_codice", "o_partenza", "o_arrivo", "o_cont","r_partenza", "fine"};
+    char tabella[7][MAX_S] = {"stampa", "o_data", "o_codice", "o_partenza", "o_arrivo", "r_partenza", "fine"};
 
     printf("Inserire comando: ");
     scanf("%s", comando);
@@ -167,22 +158,22 @@ int leggiComando(){
     return c;
 }
 
-void ordina(s_tratta elencoTratte[], int dim, int orderBy) { //Per stabilità Utilizzato l'insertion sort
+void ordina(s_tratta *elencoTratte[MAX_T], int dim, int orderBy) { //Per stabilità Utilizzato l'insertion sort
     int i, j, l=0, r=dim-1;
-    s_tratta curr;
+    s_tratta *curr;
 
     for (i = l+1; i <= r; i++) {
         curr = elencoTratte[i];
 
         for(int k = 0; k<4; k++){
-            strcpy(curr.stringhe[k],elencoTratte[i].stringhe[k]); //copio il contenuto delle stringhe di cui è possibile fare l'ordinamento in curr.
+            strcpy((*curr).stringhe[k],(*elencoTratte[i]).stringhe[k]); //copio il contenuto delle stringhe di cui è possibile fare l'ordinamento in curr.
         }
 
         if(orderBy == o_data-1)
-            strcat(curr.stringhe[orderBy], elencoTratte[i].oraPartenza); //nel caso di ordinamento per data, concateno la data all'ora della partenza. In questo modo nel caso ci siano due date uguali si ordina per ora.
+            strcat((*curr).stringhe[orderBy], (*elencoTratte[i]).oraPartenza); //nel caso di ordinamento per data, concateno la data all'ora della partenza. In questo modo nel caso ci siano due date uguali si ordina per ora.
 
         j = i - 1;
-        while (j >= l && strcmp(curr.stringhe[orderBy], elencoTratte[j].stringhe[orderBy]) < 0){ //utilizzo la variabile della struct contenente le stringhe su cui è possibile fare l'ordinamento. Per capire il criterio utilizzato, basta usare orderBy.
+        while (j >= l && strcmp((*curr).stringhe[orderBy], (*elencoTratte[j]).stringhe[orderBy]) < 0){ //utilizzo la variabile della struct contenente le stringhe su cui è possibile fare l'ordinamento. Per capire il criterio utilizzato, basta usare orderBy.
             elencoTratte[j + 1] = elencoTratte[j];
             j--;
         }
@@ -190,12 +181,20 @@ void ordina(s_tratta elencoTratte[], int dim, int orderBy) { //Per stabilità Ut
     }
 }
 
+void stampaTratteP(s_tratta *elencoPuntatoriT[MAX_T],int dim){
+    for(int i=0; i<dim; i++){
+        printf("%s %s %s %s %s %s %d\n", (*elencoPuntatoriT[i]).codice, (*elencoPuntatoriT[i]).partenza,
+               (*elencoPuntatoriT[i]).destinazione, (*elencoPuntatoriT[i]).data, (*elencoPuntatoriT[i]).oraPartenza,
+               (*elencoPuntatoriT[i]).oraArrivo, (*elencoPuntatoriT[i]).ritardo);
+    }
+}
+
 
 void stampaTratte(s_tratta *elencoTratte, int dim){
     for(int i=0; i< dim; i++){
         printf("%s %s %s %s %s %s %d\n", elencoTratte[i].codice, elencoTratte[i].partenza,
-                elencoTratte[i].destinazione, elencoTratte[i].data, elencoTratte[i].oraPartenza,
-                elencoTratte[i].oraArrivo, elencoTratte[i].ritardo);
+               elencoTratte[i].destinazione, elencoTratte[i].data, elencoTratte[i].oraPartenza,
+               elencoTratte[i].oraArrivo, elencoTratte[i].ritardo);
     }
     printf("\n");
 }

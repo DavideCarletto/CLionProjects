@@ -8,7 +8,7 @@ char *findSub(int init, char fin, char *str, int len);
 int isUpper(char c);
 
 int main() {
-    char *src = "Ai5t2", *regexp = "a\\A[aeiou]5t[123]", *founded;
+    char *src = "Ai5t2", *regexp = "\\A[aeiou]5t[123]", *founded;
 
     founded = cercaRegexp(src,regexp);
 

@@ -26,8 +26,8 @@ int leggiComando();
 void stampaTratte(s_tratta *elencoTratte, int dim);
 void stampaTratteP(s_tratta *elencoPuntatoriT[MAX_T],int dim);
 void ordina(s_tratta *elencoTratteP[MAX_T], int dim, int orderBy);
-int ricercaBinaria(s_tratta *elencoTratte, s_tratta *tratteTrovate,int l, int r, char* partenza);
-int ricercaLineare(s_tratta *elencoTratte, s_tratta *tratteTrovate, int dim, char* partenza);
+int ricercaBinaria(s_tratta *elencoTratte[MAX_T], s_tratta *tratteTrovate,int l, int r, char* partenza);
+int ricercaLineare(s_tratta *elencoTratte[MAX_T], s_tratta *tratteTrovate, int dim, char* partenza);
 
 int main() {
 
@@ -72,7 +72,7 @@ int leggiFile(FILE *fin, s_tratta *elencoTratte) {
 
 void menuTratte(s_tratta *elencoTratte, int dim, s_tratta *elencoPuntatori[4][MAX_T]){
     int continua = 1, comando =0, orderBy = 0,n = 0, ricerca =0;
-    s_tratta *c_elencoTratte = malloc(dim*sizeof (*elencoTratte)), *tratteTrovate = malloc(dim*sizeof (*elencoTratte));
+    s_tratta *tratteTrovate = malloc(dim*sizeof (*elencoTratte));
     char *partenza = (char*)malloc(sizeof(char) * (MAX_S   + 1));
 
 
@@ -109,8 +109,8 @@ void menuTratte(s_tratta *elencoTratte, int dim, s_tratta *elencoPuntatori[4][MA
                 stampaTratteP(elencoPuntatori[orderBy],dim);
                 break;
             case r_partenza:
-                memcpy(c_elencoTratte, elencoTratte, dim * sizeof(*elencoTratte));
-                ordina(c_elencoTratte,dim, o_partenza-1);
+
+                ordina(elencoPuntatori[o_partenza-1],dim, o_partenza-1);
 
                 printf("Inserire la fermata di partenza da cercare:");
                 scanf("%s",partenza);
@@ -118,9 +118,9 @@ void menuTratte(s_tratta *elencoTratte, int dim, s_tratta *elencoPuntatori[4][MA
                 scanf("%d",&ricerca);
 
                 if(ricerca == 0)
-                    n= ricercaLineare(c_elencoTratte,tratteTrovate,dim,partenza);
+                    n= ricercaLineare(elencoPuntatori[o_partenza-1],tratteTrovate,dim,partenza);
                 else if(ricerca == 1)
-                    n = ricercaBinaria(c_elencoTratte,tratteTrovate,0, dim, partenza);
+                    n = ricercaBinaria(elencoPuntatori[o_partenza-1],tratteTrovate,0, dim, partenza);
                 else
                     printf("Comando non valido");
 
@@ -199,16 +199,16 @@ void stampaTratte(s_tratta *elencoTratte, int dim){
     printf("\n");
 }
 
-int ricercaBinaria(s_tratta *elencoTratte, s_tratta *tratteTrovate, int l, int r, char* partenza){
+int ricercaBinaria(s_tratta *elencoTratte[MAX_T], s_tratta *tratteTrovate, int l, int r, char* partenza){
     int count = 0;
 
     while (l <= r) {
         int m = l + (r - l) / 2;
 
-        if (strcmp(elencoTratte[m].partenza, partenza)== 0)
-            tratteTrovate[count++] = elencoTratte[m];
+        if (strcmp((*elencoTratte[m]).partenza, partenza)== 0)
+            tratteTrovate[count++] = *elencoTratte[m];
 
-        if (strcmp(elencoTratte[m].partenza, partenza) < 0)
+        if (strcmp((*elencoTratte[m]).partenza, partenza) < 0)
             l = m + 1;
 
         else
@@ -217,12 +217,12 @@ int ricercaBinaria(s_tratta *elencoTratte, s_tratta *tratteTrovate, int l, int r
     return count;
 }
 
-int ricercaLineare(s_tratta *elencoTratte, s_tratta *tratteTrovate, int dim, char* partenza){
+int ricercaLineare(s_tratta *elencoTratte[MAX_T], s_tratta *tratteTrovate, int dim, char* partenza){
     int count =0;
 
     for(int i=0; i<dim; i++){
-        if (strcmp(elencoTratte[i].partenza, partenza)== 0)
-            tratteTrovate[count++] = elencoTratte[i];
+        if (strcmp((*elencoTratte[i]).partenza, partenza)== 0)
+            tratteTrovate[count++] = *elencoTratte[i];
     }
     return count;
 }

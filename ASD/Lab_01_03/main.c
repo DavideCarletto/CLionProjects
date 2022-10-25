@@ -88,22 +88,11 @@ void menuTratte(s_tratta *elencoTratte, int dim){
             case stampa:
                 stampaTratte(elencoTratte,dim);
                 break;
-            case o_data:
+            case o_data: case o_codice: case o_partenza: case o_arrivo:
                 ordina(elencoTratte,dim, orderBy);
                 stampaTratte(elencoTratte,dim);
                 break;
-            case o_codice:
-                ordina(elencoTratte,dim, orderBy);
-                stampaTratte(elencoTratte,dim);
-                break;
-            case o_partenza:
-                ordina(elencoTratte,dim, orderBy);
-                stampaTratte(elencoTratte,dim);
-                break;
-            case o_arrivo:
-                ordina(elencoTratte,dim, orderBy);
-                stampaTratte(elencoTratte,dim);
-                break;
+
             case r_partenza:
                 memcpy(c_elencoTratte, elencoTratte, dim * sizeof(*elencoTratte));
                 ordina(c_elencoTratte,dim, o_partenza-1);

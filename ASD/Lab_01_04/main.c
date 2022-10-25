@@ -92,24 +92,13 @@ void menuTratte(s_tratta *elencoTratte, int dim, s_tratta *elencoPuntatori[4][MA
             case stampa:
                 stampaTratte(elencoTratte,dim);
                 break;
-            case o_data:
-                ordina(elencoPuntatori[orderBy],dim, orderBy);
-                stampaTratteP(elencoPuntatori[orderBy],dim);
-                break;
-            case o_codice:
-                ordina(elencoPuntatori[orderBy],dim, orderBy);
-                stampaTratteP(elencoPuntatori[orderBy],dim);
-                break;
-            case o_partenza:
-                ordina(elencoPuntatori[orderBy],dim, orderBy);
-                stampaTratteP(elencoPuntatori[orderBy],dim);
-                break;
-            case o_arrivo:
-                ordina(elencoPuntatori[orderBy],dim, orderBy);
-                stampaTratteP(elencoPuntatori[orderBy],dim);
-                break;
-            case r_partenza:
 
+            case o_data: case o_codice: case o_partenza: case o_arrivo:
+                ordina(elencoPuntatori[orderBy],dim, orderBy);
+                stampaTratteP(elencoPuntatori[orderBy],dim);
+                break;
+
+            case r_partenza:
                 ordina(elencoPuntatori[o_partenza-1],dim, o_partenza-1);
 
                 printf("Inserire la fermata di partenza da cercare:");

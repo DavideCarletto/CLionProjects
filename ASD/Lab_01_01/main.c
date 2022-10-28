@@ -2,13 +2,14 @@
 #include <string.h>
 #include <stdlib.h>
 
+#define MAX 100
 char *cercaRegexp(char *src, char *regexp);
 int isInString(char c, char *str);
 char *findSub(int init, char fin, char *str, int len);
 int isUpper(char c);
 
 int main() {
-    char *src = "Ai5t2", *regexp = "\\A[aeiou]5t[123]", *founded;
+    char *src = "Ai5t2", *regexp = "\\A[aeiou]5t[123]", *founded=NULL;
 
     founded = cercaRegexp(src,regexp);
 
@@ -21,7 +22,7 @@ int main() {
 }
 
 char *cercaRegexp(char *src, char *regexp){
-    char corrCharRegexp, corrCharSrc, *finalString = (char*)malloc(sizeof(char) * (100   + 1)),nextCharRegexp;
+    char corrCharRegexp, corrCharSrc, *finalString = (char*)malloc(sizeof(char) * (MAX   + 1)),nextCharRegexp;
     int  indexRegexp = 0, countFinalString=0, countRegexp =0;
 
 
@@ -81,7 +82,6 @@ char *cercaRegexp(char *src, char *regexp){
         indexRegexp++;
     }
     finalString[countFinalString] = '\0';
-    finalString = realloc(finalString,countFinalString+1);
 
     if(regexp[indexRegexp]== '\0' && countRegexp == strlen(src))
         return &finalString[0];
@@ -104,7 +104,6 @@ char *findSub(int init, char fin,char *str, int len){
         finString[count++] = str[i];
     }
     finString[count] = '\0';
-    finString = realloc(finString,count+1); //rialloca memoria in funzione della lunghezza della stringa
 
     return finString;
 }

@@ -7,10 +7,6 @@
 				{
 					"build" : ".",
 					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
-					"minimumCMakeVersion" : 
-					{
-						"string" : "3.23"
-					},
 					"projectIndex" : 0,
 					"source" : ".",
 					"targetIndexes" : 
@@ -39,7 +35,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "Lab_04_02::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-Lab_04_02-Debug-03be238d94c51e225ba0.json",
+					"jsonFile" : "target-Lab_04_02-Debug-f0715a940f2961388260.json",
 					"name" : "Lab_04_02",
 					"projectIndex" : 0
 				}
@@ -49,12 +45,12 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "D:/Davide/CLionProjects/ASD/Lab_04_02/cmake-build-debug",
-		"source" : "D:/Davide/CLionProjects/ASD/Lab_04_02"
+		"build" : "C:/Users/Davide/CLionProjects/ASD/Lab_04_02/cmake-build-debug",
+		"source" : "C:/Users/Davide/CLionProjects/ASD/Lab_04_02"
 	},
 	"version" : 
 	{
 		"major" : 2,
-		"minor" : 4
+		"minor" : 3
 	}
 }

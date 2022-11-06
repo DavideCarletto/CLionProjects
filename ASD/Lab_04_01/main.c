@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-<<<<<<< HEAD
+
 typedef struct {
     int num_scelte;
     int *scelte;
@@ -156,4 +156,4 @@ int check(int *elencoVertici, arco* elencoArchi, int N , int E){ //faccio un vet
 
     return 1;
 }
->>>>>>> origin
+

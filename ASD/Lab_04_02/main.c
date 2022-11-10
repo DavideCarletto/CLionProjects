@@ -1,35 +1,19 @@
 #include <stdio.h>
-#include <stdlib.h>
+#include "Item.h"
 #include <string.h>
-#define MAX_S 50
 
-typedef struct{
-    char codice[MAX_S];
-    char nome[MAX_S];
-    char cognome[MAX_S];
-    char dataNascita[MAX_S];
-    char via[MAX_S];
-    char citta[MAX_S];
-    int cap;
-}Item;
+#define MAX_NF 100
 
-typedef struct node *link;
-
-struct node {
-    Item val;
-    link next;
-};
-
+typedef  enum {inserisci_t, inserisci_f,ricerca_c,cancella_c,cancella_d, stampa, fine, err} comando;
 
 void leggiFile(FILE *fp, link *head);
-link SortListIns(link h, Item val);
-link newNode(Item val, link next) ;
-int KEYgreater(Item a, Item b);
+void menu(link *head);
+int leggiComando(char *cmd);
+
 
 int main() {
     FILE *fp = NULL;
-    link head = NULL;
-
+    link head = NULL,x;
 
     if((fp = fopen("../E2/anag1.txt","r"))==NULL){
         printf("Error opening file...");
@@ -37,11 +21,7 @@ int main() {
     }
 
     leggiFile(fp, &head);
-
-    link x,p = NULL;
-    for (x=head; x!=NULL; p = x, x=x->next) {
-        printf("%s %s\n", x->val.nome,x->val.cognome);
-    }
+    menu(&head);
     return 0;
 }
 
@@ -49,33 +29,94 @@ void leggiFile(FILE *fp, link* head){
     Item val;
 
     while(!feof(fp)){
-            fscanf(fp, "%s %s %s %s %s %s %d", &val.codice[0], &val.nome[0], &val.cognome[0], &val.dataNascita[0],
+            fscanf(fp, "%s %s %s %s %s %s %d\n", &val.codice[0], &val.nome[0], &val.cognome[0], &val.dataNascita[0],
                    &val.via[0], &val.citta[0], &val.cap);
+            formatDate(&val);
             (*head) = SortListIns(*head, val);
     }
 
 }
 
-link SortListIns(link h, Item val) {
-    link x, p;
-    if (h==NULL || KEYgreater(h->val,val))
-        return newNode(val, h);
-    for (x=h->next, p=h;x!=NULL && KEYgreater(val,x->val);p=x, x=x->next); //aggiungo controllo Keygrater
-    p->next = newNode(val, x);
-    return h;
-}
+void menu(link *head){
+    char comando[MAX_S], fileName[MAX_NF] = "../E2/anag2.txt", codice[MAX_S];
+    int cmd=0;
+    Item val;
+    FILE *fp = NULL;
+    link founded = NULL;
 
-link newNode(Item val, link next) {
-    link x = malloc(sizeof *x);
-    if (x==NULL)
-        return NULL;
-    else {
-        x->val = val;
-        x->next = next;
+
+    while(cmd!= fine) {
+        printf("CMD inserisci_t: acquisizione e inserimento ordinato di un nuovo elemento in lista (da tastiera)\n"
+               "CMD inserisci_f: acquisizione e inserimento ordinato di un nuovo elemento in lista (da file)\n"
+               "CMD ricerca_c: ricerca, per codice, di un elemento\n"
+               "CMD cancella_c: cancellazione di un elemento dalla lista per codice\n"
+               "CMD cancella_d: cancellazione di tutti gli elementi con date comprese tra 2 date\n"
+               "CMD stampa: stampa della lista su file\n"
+               "CMD fine: per terminare\n");
+
+        printf("Inserire comando:");
+        scanf("%s", comando);
+
+        cmd = leggiComando(comando);
+
+        switch (cmd){
+            case inserisci_t:
+                printf("Inserire l'elemento nel formato: <codice> <nome> <cognome> <data_di_nascita> <via> <citta'> <cap>:\n");
+                scanf("%s %s %s %s %s %s %d", &val.codice, &val.nome, &val.cognome, &val.dataNascita, &val.via, &val.citta, &val.cap);
+                formatDate(&val);
+                (*head) = SortListIns(*head, val);
+                printList(*head);
+                break;
+
+            case inserisci_f:
+                printf("Inserire il nome del file: ");
+                scanf( "%s",fileName);
+
+                if((fp = fopen(fileName, "r"))== NULL) {
+                    printf("Error opening file...");
+                    break;
+                }
+
+                leggiFile(fp, head);
+                printList(*head);
+                break;
+            case ricerca_c:
+                printf("Inserire il codice da ricercare:");
+                scanf("%s",codice);
+
+                founded = listSearch(*head, codice);
+
+                if(founded!= NULL) {
+                    printf("\nTrovato elemento corrispondente:\n");
+                    printItem(founded);
+                }
+                else
+                    printf("\nNessuna corrispondenza trovata.\n\n");
+                break;
+            case cancella_c:
+                break;
+            case cancella_d:
+                break;
+            case stampa:
+                printList(*head);
+                break;
+            case fine:
+                printf("Programma terminato.");
+                break;
+            case err:
+                printf("Errore comando...\n");
+                break;
+        }
     }
-    return x;
 }
 
-int KEYgreater(Item a, Item b){
-    return strcmp(a.dataNascita, b.dataNascita);
+int leggiComando(char *comando){
+
+    char tab[8][MAX_S] = {"inserisci_t", "inserisci_f","ricerca_c","cancella_c","cancella_d", "stampa", "fine", "err"};
+    int c =0;
+
+    while(c <err && strcmp(comando, tab[c])!=0)
+        c++;
+
+    return c;
 }

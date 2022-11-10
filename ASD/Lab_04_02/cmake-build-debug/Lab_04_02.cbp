@@ -82,6 +82,12 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="C:/Users/Davide/CLionProjects/ASD/Lab_04_02/Item.c">
+			<Option target="Lab_04_02"/>
+		</Unit>
+		<Unit filename="C:/Users/Davide/CLionProjects/ASD/Lab_04_02/Item.h">
+			<Option target="Lab_04_02"/>
+		</Unit>
 		<Unit filename="C:/Users/Davide/CLionProjects/ASD/Lab_04_02/main.c">
 			<Option target="Lab_04_02"/>
 		</Unit>

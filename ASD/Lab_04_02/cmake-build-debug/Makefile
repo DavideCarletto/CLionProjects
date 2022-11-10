@@ -128,6 +128,30 @@ Lab_04_02/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Lab_04_02.dir\build.make CMakeFiles/Lab_04_02.dir/build
 .PHONY : Lab_04_02/fast
 
+Item.obj: Item.c.obj
+.PHONY : Item.obj
+
+# target to build an object file
+Item.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Lab_04_02.dir\build.make CMakeFiles/Lab_04_02.dir/Item.c.obj
+.PHONY : Item.c.obj
+
+Item.i: Item.c.i
+.PHONY : Item.i
+
+# target to preprocess a source file
+Item.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Lab_04_02.dir\build.make CMakeFiles/Lab_04_02.dir/Item.c.i
+.PHONY : Item.c.i
+
+Item.s: Item.c.s
+.PHONY : Item.s
+
+# target to generate assembly for a file
+Item.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Lab_04_02.dir\build.make CMakeFiles/Lab_04_02.dir/Item.c.s
+.PHONY : Item.c.s
+
 main.obj: main.c.obj
 .PHONY : main.obj
 
@@ -161,6 +185,9 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... Lab_04_02
+	@echo ... Item.obj
+	@echo ... Item.i
+	@echo ... Item.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s

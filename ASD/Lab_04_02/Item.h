@@ -26,11 +26,14 @@ struct node {
 
 link SortListIns(link h, Item val);
 link newNode(Item val, link next) ;
-int KEYgreater(Item a, Item b);
+link deleteNode(link *head, link val);
+link getEndNode(link head);
 void formatDate(Item *val);
 void printList(link h);
 void printItem(link x);
-link listSearch(link head, char *key);
-int KEYeq(char *a, char *b);
+link listSearchC(link head, char *key);
+link listSearchD(link head, char *key);
+int KEYcmp(char *a, char *b);
+void dealloca(link *head);
 
 #endif //LAB_04_02_ITEM_H

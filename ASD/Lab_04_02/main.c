@@ -13,7 +13,7 @@ int leggiComando(char *cmd);
 
 int main() {
     FILE *fp = NULL;
-    link head = NULL,x;
+    link head = NULL;
 
     if((fp = fopen("../E2/anag1.txt","r"))==NULL){
         printf("Error opening file...");
@@ -38,11 +38,11 @@ void leggiFile(FILE *fp, link* head){
 }
 
 void menu(link *head){
-    char comando[MAX_S], fileName[MAX_NF] = "../E2/anag2.txt", codice[MAX_S];
+    char comando[MAX_S], fileName[MAX_NF] = "../E2/anag2.txt", codice[MAX_S], d1[MAX_S],d2[MAX_S];
     int cmd=0;
     Item val;
     FILE *fp = NULL;
-    link founded = NULL;
+    link founded = NULL, delVal = NULL;
 
 
     while(cmd!= fine) {
@@ -57,6 +57,8 @@ void menu(link *head){
         printf("Inserire comando:");
         scanf("%s", comando);
 
+
+
         cmd = leggiComando(comando);
 
         switch (cmd){
@@ -65,7 +67,6 @@ void menu(link *head){
                 scanf("%s %s %s %s %s %s %d", &val.codice, &val.nome, &val.cognome, &val.dataNascita, &val.via, &val.citta, &val.cap);
                 formatDate(&val);
                 (*head) = SortListIns(*head, val);
-                printList(*head);
                 break;
 
             case inserisci_f:
@@ -84,7 +85,7 @@ void menu(link *head){
                 printf("Inserire il codice da ricercare:");
                 scanf("%s",codice);
 
-                founded = listSearch(*head, codice);
+                founded = listSearchC(*head, codice);
 
                 if(founded!= NULL) {
                     printf("\nTrovato elemento corrispondente:\n");
@@ -94,13 +95,44 @@ void menu(link *head){
                     printf("\nNessuna corrispondenza trovata.\n\n");
                 break;
             case cancella_c:
+                printf("Inserire il codice da ricercare:");
+                scanf("%s",codice);
+
+                founded = listSearchC(*head, codice);
+                if(founded!= NULL) {
+                    printf("\nTrovato elemento corrispondente:\n\n");
+                    delVal = deleteNode(head, founded);
+                    printItem(delVal);
+                    printf("Elemento eliminato.\n");
+                    printList(*head);
+                }
+                else
+                    printf("\nNessuna corrispondenza trovata.\n\n");
                 break;
             case cancella_d:
+                printf("Inserire l'intervallo di date per cui eliminare gli elementi: (formato: yyyy/mm/dd): ");
+                scanf("%s %s",d1,d2);
+
+                founded = listSearchD(*head, d1);
+
+                if(founded== NULL) {
+                    printf("\nNessun elemento trovato.\n\n");
+                    break;
+                }
+
+                for(link x = founded; x != NULL && KEYcmp(x->val.dataNascita, d2)<=0; x = x->next){
+                    delVal = deleteNode(head, x);
+                    printf("ELemento eliminato: ");
+                    printItem(delVal);
+                }
+
+                printList(*head);
                 break;
             case stampa:
                 printList(*head);
                 break;
             case fine:
+                dealloca(head);
                 printf("Programma terminato.");
                 break;
             case err:
@@ -110,12 +142,12 @@ void menu(link *head){
     }
 }
 
-int leggiComando(char *comando){
+int leggiComando(char *cmd){
 
     char tab[8][MAX_S] = {"inserisci_t", "inserisci_f","ricerca_c","cancella_c","cancella_d", "stampa", "fine", "err"};
     int c =0;
 
-    while(c <err && strcmp(comando, tab[c])!=0)
+    while(c <err && strcmp(cmd, tab[c]) != 0)
         c++;
 
     return c;

@@ -1,26 +1,29 @@
-//
-// Created by Davide on 09/11/2022.
-//
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "Item.h"
 
-link listSearch(link h, char *key){
+link listSearchC(link h, char *key){
     link x;
    for(x = h; x!= NULL; x = x->next){
-       if(KEYeq(x->val.codice, key)==0)
+       if(KEYcmp(x->val.codice, key)==0)
            return x;
    }
     return NULL;
 }
+link listSearchD(link h, char *key){
+    link x;
+    for(x = h; x!= NULL && KEYcmp(x->val.dataNascita, key)<0;x = x->next);
+
+    return x;
+}
 
 link SortListIns(link h, Item val) {
     link x, p;
-    if (h==NULL || KEYgreater(h->val,val)>0) {
+    if (h==NULL || KEYcmp(h->val.dataNascita,val.dataNascita)>0) {
         return newNode(val, h);
     }
-    for (x=h->next, p=h;x!=NULL && KEYgreater(val,x->val)>0;p=x, x=x->next);
+    for (x=h->next, p=h;x!=NULL && KEYcmp(val.dataNascita,x->val.dataNascita)>=0;p=x, x=x->next);
     p->next = newNode(val, x);
 
     return h;
@@ -37,11 +40,23 @@ link newNode(Item val, link next) {
     return x;
 }
 
-int KEYgreater(Item a, Item b){
-    return strcmp(a.dataNascita, b.dataNascita);
+link deleteNode(link *head, link val){
+    link p,x;
+
+    if(head == NULL) return NULL;
+
+    for(x = *head, p=NULL; x!= NULL && x != val; p = x, x = x->next);
+
+    if(x==*head) {
+        *head = x->next;
+        return x;
+    }
+    p->next = val->next;
+
+    return val;
 }
 
-int KEYeq(char *a, char *b){
+int KEYcmp(char *a, char *b){
     return strcmp(a, b);
 }
 void printList(link h){
@@ -56,6 +71,14 @@ void printList(link h){
 }
 void printItem(link x){
     printf("%s %s %s %s %s %s %d\n\n", x->val.codice, x->val.nome, x->val.cognome, x->val.dataNascita, x->val.via, x->val.citta, x->val.cap);
+}
+
+void dealloca(link *head){
+    if(*head==NULL)
+        return;
+    *head = (*head)->next;
+    dealloca(head);
+    free(*head);
 }
 void formatDate(Item *val){
     char r[MAX_S],temp[MAX_S];
@@ -84,7 +107,6 @@ void formatDate(Item *val){
     }
     r[strlen(val->dataNascita)]='\0';
     strcpy(val->dataNascita, r);
-
 }
 
 

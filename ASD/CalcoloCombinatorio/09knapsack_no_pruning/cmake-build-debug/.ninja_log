@@ -1,0 +1,4 @@
+# ninja log v5
+0	87	6899087164107430	CMakeFiles/09knapsack_no_pruning.dir/Item.c.obj	59e2e8b2229457ff
+4	94	6899087164197469	CMakeFiles/09knapsack_no_pruning.dir/main.c.obj	9a685e574155face
+95	204	6899087165249808	09knapsack_no_pruning.exe	f7df45aafbb46741

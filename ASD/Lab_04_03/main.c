@@ -71,6 +71,7 @@ void leggiFile(FILE *fp, int *val, int *sol,int *dim){
         }
     }
 }
+
 int disp_ripetute(int *val, int *sol, int len, int pos, int last, int k, int max){
 
     if(pos>=k){

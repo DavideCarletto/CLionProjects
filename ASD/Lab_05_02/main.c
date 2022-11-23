@@ -10,17 +10,17 @@ typedef struct{
     int tessera, rotation;
 }cella;
 
-void leggiFile(FILE *fp1, FILE *fp2, int T, int R, int C, tessera *elencoTessere, cella **elencoCelle);
+void leggiFile(FILE *fp1, FILE *fp2, int T, int R, int C, tessera *elencoTessere, cella **elencoCelle, int *mark);
 void allocaTutto(tessera **elencoTessere, int T, cella ***elencoCelle, int R, int C);
 void stampaTessere(tessera *elencoTessere, int T);
 void stampaCelle(cella **elencoCelle, int R, int C);
 void stampaSoluzione(tessera *elencoTessere,cella **elencoCelle, int R, int C);
-void disp_semplici(int pos, tessera *elencoTessere, cella **elencoCelle, int R, int C, int T);
-int controlla(tessera *elencoTessere, cella *elencoCelle, int R, int C, int pos);
+void disp_semplici(int pos, int *mark, tessera *elencoTessere, cella **elencoCelle, int R, int C, int T);
+int controlla(tessera *elencoTessere, cella **elencoCelle, int R, int C, int pos);
 
 int main() {
     FILE *fp1, *fp2;
-    int T,R,C;
+    int T,R,C, *mark;
     tessera *elencoTessere;
     cella **elencoCelle;
 
@@ -38,17 +38,18 @@ int main() {
 
     allocaTutto(&elencoTessere,T, &elencoCelle, R, C);
 
-    leggiFile(fp1, fp2, T, R, C, elencoTessere, elencoCelle);
+    mark = calloc(T, sizeof (int));
+    leggiFile(fp1, fp2, T, R, C, elencoTessere, elencoCelle, mark);
 
     stampaCelle(elencoCelle, R, C);
 
-    disp_semplici(0,elencoTessere, elencoCelle, R, C, T);
+    disp_semplici(0, mark,elencoTessere, elencoCelle, R, C, T);
 
     return 0;
 }
 
 
-void leggiFile(FILE *fp1, FILE *fp2, int T, int R, int C, tessera *elencoTessere, cella **elencoCelle){
+void leggiFile(FILE *fp1, FILE *fp2, int T, int R, int C, tessera *elencoTessere, cella **elencoCelle, int *mark){
     int i;
 
     for(i =0; i<T; i++){
@@ -61,6 +62,8 @@ void leggiFile(FILE *fp1, FILE *fp2, int T, int R, int C, tessera *elencoTessere
     for(i =0; i<R; i++){
         for(int j=0; j<C; j++){
             fscanf(fp2, "%d/%d\n",&elencoCelle[i][j].tessera,&elencoCelle[i][j].rotation);
+            if(elencoCelle[i][j].tessera!=-1)
+                mark[elencoCelle[i][j].tessera] = 1;
         }
     }
 }
@@ -118,11 +121,11 @@ void stampaSoluzione(tessera *elencoTessere,cella **elencoCelle, int R, int C){
     }
 }
 
-void disp_semplici(int pos, tessera *elencoTessere, cella **elencoCelle,int R, int C, int T){
+void disp_semplici(int pos, int *mark, tessera *elencoTessere, cella **elencoCelle,int R, int C, int T){
     int i, j;
 
     if(pos >= R*C){
-        stampaSoluzione(elencoTessere, elencoCelle, R, C);
+        stampaCelle(elencoCelle,R,C);
         return;
     }
 
@@ -131,21 +134,59 @@ void disp_semplici(int pos, tessera *elencoTessere, cella **elencoCelle,int R, i
 
 
     if(elencoCelle[i][j].tessera!= -1){
-        disp_semplici(pos+1, elencoTessere, elencoCelle, R, C,T);
+        disp_semplici(pos+1, mark, elencoTessere, elencoCelle, R, C,T);
         return;
     }
 
     for(int k = 0; k<T; k++){
-        elencoCelle[i][j].tessera = k;
-        elencoCelle[i][j].rotation = 0;
-        //if controlla
+        if(mark[k]==0) {
+            mark[k]=1;
+            elencoCelle[i][j].tessera = k;
+            elencoCelle[i][j].rotation = 0;
 
-        elencoCelle[i][j].rotation = 1;
-        disp_semplici(pos,elencoTessere, elencoCelle, R, C, T);
-        elencoCelle[i][j].tessera = 0;
+            if (controlla(elencoTessere, elencoCelle, R, C, pos)) {
+                disp_semplici(pos + 1, mark, elencoTessere, elencoCelle, R, C, T);
+            }
+
+            elencoCelle[i][j].rotation = 1;
+            disp_semplici(pos, mark, elencoTessere, elencoCelle, R, C,T);
+
+            elencoCelle[i][j].tessera = -1;
+            elencoCelle[i][j].rotation = -1;
+            mark[k] = 0;
+        }
     }
 }
 
-int controlla(tessera *elencoTessere, cella *elencoCelle, int R, int C, int pos){
-    //da fare
+int controlla(tessera *elencoTessere, cella **elencoCelle, int R, int C, int pos){
+   int i, j, okCol = 1;
+   char cT1, cT2;
+
+   i = pos / (R);
+   j = pos % (C);
+
+   if(elencoCelle[i][j].rotation == 1) {
+       cT1 = elencoTessere[elencoCelle[i][j].tessera].cT2;
+       cT2 = elencoTessere[elencoCelle[i][j].tessera].cT1;
+   }
+   if(elencoCelle[i][j].rotation==0)
+   {
+       cT1 = elencoTessere[elencoCelle[i][j].tessera].cT1;
+       cT2 = elencoTessere[elencoCelle[i][j].tessera].cT2;
+   }
+
+   for(int c = 0; c<C; c++){
+       if(c!= j && elencoCelle[i][c].tessera!=-1)
+           if(cT1 != elencoTessere[elencoCelle[i][c].tessera].cT1)
+               okCol = 0;
+   }
+
+   if(!okCol) {
+       for (int r = 0; r < R; r++) {
+           if (r != i && elencoCelle[r][j].tessera!=-1)
+               if (cT2 != elencoTessere[elencoCelle[r][j].tessera].cT2)
+                   return 0;
+       }
+   }
+   return 1;
 }

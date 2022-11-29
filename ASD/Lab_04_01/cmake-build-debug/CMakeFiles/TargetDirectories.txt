@@ -1,9 +1,3 @@
-<<<<<<< HEAD
 C:/Users/Davide/CLionProjects/ASD/Lab_04_01/cmake-build-debug/CMakeFiles/Lab_04_01.dir
 C:/Users/Davide/CLionProjects/ASD/Lab_04_01/cmake-build-debug/CMakeFiles/edit_cache.dir
 C:/Users/Davide/CLionProjects/ASD/Lab_04_01/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-=======
-D:/Davide/CLionProjects/ASD/Lab_04_01/cmake-build-debug/CMakeFiles/Lab_04_01.dir
-D:/Davide/CLionProjects/ASD/Lab_04_01/cmake-build-debug/CMakeFiles/edit_cache.dir
-D:/Davide/CLionProjects/ASD/Lab_04_01/cmake-build-debug/CMakeFiles/rebuild_cache.dir
->>>>>>> origin

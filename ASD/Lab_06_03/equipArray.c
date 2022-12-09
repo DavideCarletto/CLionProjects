@@ -1,32 +1,32 @@
 #include "equipArray.h"
 
 struct equipArray_s{
-    inv_t *items;
-    int size, max;
+    inv_t *vettEq;
+    int inUso;
 };
+
 equipArray_t equipArray_init(){
     equipArray_t arr = malloc(sizeof (equipArray_t));
 
-    arr->items = malloc(8*sizeof (inv_t));
-    arr->size = 0;
-    arr->max = 8;
+    arr->vettEq = malloc(8*sizeof (inv_t));
+    arr->inUso = 0;
 }
 
 void equipArray_free(equipArray_t equipArray){
-
+    free(equipArray);
 }
 
 /* quanti equipaggiamenti sono in uso */
 int equipArray_inUse(equipArray_t equipArray){
-    return equipArray->size;
+    return equipArray->inUso;
 }
 
 /* scrittura su file */
 void equipArray_print(FILE *fp, equipArray_t equipArray, invArray_t invArray){
     printf("\nEquipaggiamenti del personaggio:\n");
-    for(int i=0; i<equipArray->size;i++){
+    for(int i=0; i<equipArray->inUso; i++){
         printf("%d_ ",i+1);
-        inv_print(fp, &equipArray->items[i]);
+        inv_print(fp, &equipArray->vettEq[i]);
     }
 }
 /* modifica equipaggiamento scegliendo un oggetto da inventario */
@@ -48,10 +48,10 @@ void equipArray_update(equipArray_t equipArray, invArray_t invArray){
             equipArray_add(equipArray,inv);
             break;
         case 1:
-            if(equipArray->size>0) {
+            if(equipArray->inUso > 0) {
                 printf("Selezionare l'equipaggiamento che si vuole rimuovere: ");
                 scanf("%d", &equipRmv);
-                if(equipRmv<=equipArray->size) {
+                if(equipRmv<=equipArray->inUso) {
                     equipArray_remove(equipArray, equipRmv - 1);
                 } else{
                     printf("Scelta non valida.");
@@ -69,32 +69,34 @@ int equipArray_getEquipByIndex(equipArray_t equipArray, int index){
 
 /* Si possono aggiungere altre funzioni se ritenute necessarie */
 void equipArray_add(equipArray_t equipArray, inv_t *inv){
-    if(equipArray->size <= equipArray->max) {
-        equipArray->items[equipArray->size++] = *inv;
+    if(equipArray->inUso <= 8) {
+        equipArray->vettEq[equipArray->inUso++] = *inv;
     }
     else
         printf("Superato il numero di equipaggiamenti utilizzabili da questo personaggio.");
 }
 void equipArray_remove(equipArray_t equipArray, int index){
-    for(int i=index+1; i<equipArray->size;i++){
+    for(int i=index+1; i<equipArray->inUso; i++){
         equipArray[i-1] = equipArray[i];
     }
-    equipArray->size--;
+    equipArray->inUso--;
 }
 
 void equipArray_newEquipStats(equipArray_t equipArray, stat_t *eq_stat){
 
-    for(int i=0; i<equipArray->size;i++){
-        eq_stat->hp+= equipArray->items[i].stat.hp;
-        printf("%d %d \n",  eq_stat->hp, equipArray->items[i].stat.hp);
-        eq_stat->mp+= equipArray->items[i].stat.mp;
-        eq_stat->atk+= equipArray->items[i].stat.atk;
-        eq_stat->def+= equipArray->items[i].stat.def;
-        eq_stat->mag+= equipArray->items[i].stat.mag;
-        eq_stat->spr+= equipArray->items[i].stat.spr;
+    for(int i=0; i<equipArray->inUso; i++){
+        eq_stat->hp+= equipArray->vettEq[i].stat.hp;
+        eq_stat->mp+= equipArray->vettEq[i].stat.mp;
+        eq_stat->atk+= equipArray->vettEq[i].stat.atk;
+        eq_stat->def+= equipArray->vettEq[i].stat.def;
+        eq_stat->mag+= equipArray->vettEq[i].stat.mag;
+        eq_stat->spr+= equipArray->vettEq[i].stat.spr;
     }
+
+    if(eq_stat->hp<0) eq_stat->hp = 0; if(eq_stat->mp<0) eq_stat->mp = 0; if(eq_stat->atk<0) eq_stat->atk = 0;
+    if(eq_stat->def<0) eq_stat->def = 0; if(eq_stat->mag<0) eq_stat->mag = 0; if(eq_stat->spr<0) eq_stat->spr = 0;
 }
 
 int equipArray_getSize(equipArray_t equipArray){
-    return equipArray->size;
+    return equipArray->inUso;
 }

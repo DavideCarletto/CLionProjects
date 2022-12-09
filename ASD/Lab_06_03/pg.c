@@ -6,7 +6,7 @@ int pg_read(FILE *fp, pg_t *pgp){
 }
 /* non essendo struct dinamica, pulisce chiamando il distruttire di equipArray */
 void pg_clean(pg_t *pgp){
-
+    equipArray_free(pgp->equip);
 }
 
 void pg_print(FILE *fp, pg_t *pgp, invArray_t invArray){

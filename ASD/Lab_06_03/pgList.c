@@ -8,8 +8,8 @@ struct node{
 };
 
 struct pgList_s{
-    link head;
-    int N;
+    link headPg, tailPg;
+    int nPg;
 };
 
 link newNode(pg_t val, link next);
@@ -18,13 +18,21 @@ link listInsHEad(link h, pg_t val);
 pgList_t pgList_init(){
 
     pgList_t lista = malloc(sizeof (pgList_t));
-    lista->head= NULL;
-    lista->N = 0;
+    lista->headPg= NULL;
+    lista->nPg = 0;
 
     return lista;
 }
 
 void pgList_free(pgList_t pgList){
+    link x,p;
+
+    for( x = pgList->headPg; x != NULL; x = p){
+        pg_clean(&x->val);
+        p = x->next;
+        free(x);
+    }
+    free(pgList);
 }
 
 /* lettura e scrittura su file */
@@ -45,16 +53,19 @@ void pgList_read(FILE *fp, pgList_t pgList){
 void pgList_print(FILE *fp, pgList_t pgList, invArray_t invArray){
     link x;
 
-    for(x = pgList->head; x!= NULL; x = x->next){
+    for(x = pgList->headPg; x != NULL; x = x->next){
         pg_print(fp, &x->val, NULL);
     }
 }
 
 /* inserimento di un nuovo personaggio */
 void pgList_insert(pgList_t pgList, pg_t pg){
-    pgList->head = listInsHEad(pgList->head, pg);
-    pgList->N++;
+    pgList->headPg = listInsHEad(pgList->headPg, pg);
+    pgList->headPg->val.equip = equipArray_init();
+    pgList->headPg->val.eq_stat = pgList->headPg->val.b_stat;
+    pgList->nPg++;
 }
+
 /* cancellazione con rimozione */
 void pgList_remove(pgList_t pgList, char* cod){
     link x, p;
@@ -62,13 +73,13 @@ void pgList_remove(pgList_t pgList, char* cod){
 
     val = pgList_searchByCode(pgList, cod);
 
-    if(pgList->head == NULL) return;
+    if(pgList->headPg == NULL) return;
 
-    for (x = pgList->head, p = NULL; x!= NULL && &(x->val) != val; p = x, x = x->next);
+    for (x = pgList->headPg, p = NULL; x != NULL && &(x->val) != val; p = x, x = x->next);
 
 
-    if(x == pgList->head){
-        pgList->head = x->next;
+    if(x == pgList->headPg){
+        pgList->headPg = x->next;
         return;
     }
     p->next = x->next;
@@ -77,7 +88,7 @@ void pgList_remove(pgList_t pgList, char* cod){
 pg_t *pgList_searchByCode(pgList_t pgList, char* cod){
     link x;
 
-    for(x = pgList->head; x!= NULL; x = x->next){
+    for(x = pgList->headPg; x != NULL; x = x->next){
         if(strcmp(x->val.cod, cod)==0){
             return &x->val;
         }

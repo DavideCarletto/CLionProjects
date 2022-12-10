@@ -31,13 +31,16 @@ typedef enum{
 }pietra;
 
 void leggiFile(FILE *fp, int *val,int *dim);
-int fZ(int *val, int len, int max);
-int fR(int *val, int len, int max);
-int fT(int *val, int len, int max);
-int fS(int *val, int len, int max);
+int fZ(int *****m, int *val, int len, int max);
+int fR(int *****m, int *val, int len, int max);
+int fT(int *****m, int *val, int len, int max);
+int fS(int *****m, int *val, int len, int max);
 int calcolaMax(int *val, int lenMax);
 void allocaVal(int **val, int dim);
 int trovaMax(int *maxPietre);
+int trovaMaggiore(int a, int b);
+int *****malloc5d(int maxZ, int maxR, int maxT, int maxS);
+void dealloca5d(int *****m, int maxZ, int maxR, int maxT);
 
 int main() {
     int *val, dim = 0;
@@ -61,6 +64,7 @@ int main() {
 void leggiFile(FILE *fp, int *val,int *dim) {
     int max, count = 1;
 
+
     while (!feof(fp)) {
         for (int i = 0; i < *dim; i++) {
             if (!feof(fp))
@@ -76,25 +80,28 @@ void leggiFile(FILE *fp, int *val,int *dim) {
 }
 
 int calcolaMax(int *val, int lenMax){
-    int maxPietre[4];
+    int maxPietre[4], *****m;
+
+    m = malloc5d(val[0]+1, val[1]+1, val[2]+1, val[3]+1);
 
     val[zaffiro]--;
-    maxPietre[zaffiro] = 1+fZ(val, lenMax-1,0);
+    maxPietre[zaffiro] = fZ(m,val, lenMax-1,0);
     val[zaffiro]++;
 
     val[rubino]--;
-    maxPietre[rubino] = 1+fR(val, lenMax-1,0);
+    maxPietre[rubino] = fR(m,val, lenMax-1,0);
     val[rubino]++;
 
     val[topazio]--;
-    maxPietre[topazio] = 1+fT(val, lenMax-1,0);
+    maxPietre[topazio] = fT(m,val, lenMax-1,0);
     val[topazio]++;
 
     val[smeraldo]--;
-    maxPietre[smeraldo] = 1+fS(val, lenMax-1,0);
+    maxPietre[smeraldo] = fS(m,val, lenMax-1,0);
     val[smeraldo]++;
 
-//    printf("%d %d %d %d", maxPietre[0], maxPietre[1], maxPietre[2], maxPietre[3]);
+    dealloca5d(m,val[0]+1, val[1]+1, val[2]+1);
+
     return trovaMax(maxPietre);
 
 }
@@ -103,75 +110,96 @@ void allocaVal(int **val, int dim) {
     (*val) = (int *) malloc(dim * sizeof(int));
 }
 
-int fZ(int *val, int len, int max){
+int fZ(int *****m, int *val, int len, int max){
+    int maxZ=0, maxR=0;
+
+    if(m[zaffiro][val[zaffiro]][val[rubino]][val[topazio]][val[smeraldo]] != -1) return m[zaffiro][val[zaffiro]][val[rubino]][val[topazio]][val[smeraldo]];
 
     if(len == 0)
         return 0;
 
     if(val[zaffiro]>0){
         val[zaffiro]--;
-        max = 1+fZ(val, len-1,max);
+        maxZ = 1+fZ(m,val, len-1,max);
+        maxR = 1+fR(m,val, len-1, max);
         val[zaffiro]++;
-    }
-    else if(val[rubino]>0){
-        val[rubino]--;
-        max = 1+fR(val, len-1,max);
-        val[rubino]++;
-    }
 
+    }
+    max = trovaMaggiore(maxZ,maxR);
+    m[zaffiro][val[zaffiro]][val[rubino]][val[topazio]][val[smeraldo]] = max;
     return max;
 }
 
-int fR(int *val, int len, int max){
+int fR(int *****m, int *val, int len, int max){
+    int maxS=0, maxT=0;
+
+    if(m[rubino][val[zaffiro]][val[rubino]][val[topazio]][val[smeraldo]] != -1) return m[rubino][val[zaffiro]][val[rubino]][val[topazio]][val[smeraldo]];
+
     if(len == 0)
         return 0;
+
+
+    if(val[rubino]>0){
+        val[rubino]--;
+        maxS = 1+fS(m,val, len-1,max);
+        maxT = 1+fT(m,val, len-1, max);
+        val[rubino]++;
+
+    }
+    max = trovaMaggiore(maxS,maxT);
+    m[rubino][val[zaffiro]][val[rubino]][val[topazio]][val[smeraldo]] = max;
+    return max;
+}
+
+int fT(int *****m, int *val, int len, int max){
+    int maxZ=0, maxR=0;
+
+    if(m[topazio][val[zaffiro]][val[rubino]][val[topazio]][val[smeraldo]] != -1) return m[topazio][val[zaffiro]][val[rubino]][val[topazio]][val[smeraldo]];
+
+    if(len == 0)
+        return 0;
+
+
+    if(val[topazio]>0){
+        val[topazio]--;
+        maxZ = 1+fZ(m,val, len-1,max);
+        maxR = 1+fR(m,val, len-1,max);
+        val[topazio]++;
+
+    }
+
+    max = trovaMaggiore(maxZ, maxR);
+    m[topazio][val[zaffiro]][val[rubino]][val[topazio]][val[smeraldo]] = max;
+    return max;
+}
+
+int fS(int *****m, int *val, int len, int max){
+    int maxS=0, maxT=0;
+
+    if(m[smeraldo][val[zaffiro]][val[rubino]][val[topazio]][val[smeraldo]] != -1) return m[smeraldo][val[zaffiro]][val[rubino]][val[topazio]][val[smeraldo]];
+
+    if(len == 0)
+        return 0;
+
 
     if(val[smeraldo]>0){
         val[smeraldo]--;
-        max = 1+fS(val, len-1,max);
+        maxS = 1+fS(m,val, len-1,max);
+        maxT = 1+fT(m,val, len-1,max);
         val[smeraldo]++;
+
     }
-    else if(val[topazio]>0){
-        val[topazio]--;
-        max = 1+fT(val, len-1,max);
-        val[topazio]++;
-    }
+    max = trovaMaggiore(maxS,maxT);
+    m[smeraldo][val[zaffiro]][val[rubino]][val[topazio]][val[smeraldo]] = max;
     return max;
 }
 
-int fT(int *val, int len, int max){
+int trovaMaggiore(int a, int b){
+    if(a>=b)
+        return a;
 
-    if(len == 0)
-        return 0;
-    if(val[zaffiro]>0){
-        val[zaffiro]--;
-        max = 1+fZ(val, len-1,max);
-        val[zaffiro]++;
-    }
-    else if(val[rubino]>0){
-        val[rubino]--;
-        max = 1+fR(val, len-1,max);
-        val[rubino]++;
-    }
-    return max;
+    return b;
 }
-
-int fS(int *val, int len, int max){
-    if(len == 0)
-        return 0;
-    if(val[smeraldo]>0){
-        val[smeraldo]--;
-        max = 1+fS(val, len-1,max);
-        val[smeraldo]++;
-    }
-    else if(val[topazio]>0){
-        val[topazio]--;
-        max = 1+fT(val, len-1,max);
-        val[topazio]++;
-    }
-    return max;
-}
-
 int trovaMax(int *maxPietre){
     int max =0;
 
@@ -180,4 +208,45 @@ int trovaMax(int *maxPietre){
             max = maxPietre[i];
     }
     return max;
+}
+
+int *****malloc5d(int maxZ, int maxR, int maxT, int maxS){
+    int ***** m;
+    int i,z,r,t,s;
+
+    m = (int *****) malloc(4*sizeof (int ****));
+
+    for(i=0;i<4;i++){
+        m[i] = (int ****) malloc(maxZ *sizeof (int ***));
+        for(z=0; z< maxZ; z++){
+            m[i][z] = (int ***) malloc(maxR *sizeof (int **));
+            for ( r = 0; r < maxR; r++) {
+                m[i][z][r] = (int **) malloc(maxT*sizeof (int *));
+                for(t =0; t<maxT; t++){
+                    m[i][z][r][t] = (int *) malloc(maxS*sizeof (int));
+                }
+            }
+        }
+    }
+
+    for(i=0; i<4;i++) for(z=0;z<maxZ;z++) for(r=0;r<maxR;r++) for(t=0;t<maxT;t++) for(s=0;s<maxS;s++) m[i][z][r][t][s]=-1;
+
+    return m;
+}
+
+void dealloca5d(int *****m, int maxZ, int maxR, int maxT){
+
+    for(int i=0; i<4;i++){
+        for(int z =0; z<maxZ; z++){
+            for(int r=0; r<maxR; r++){
+                for(int t =0; t<maxT; t++){
+                    free(m[i][z][r][t]);
+                }
+                free(m[i][z][r]);
+            }
+            free(m[i][z]);
+        }
+        free(m[i]);
+    }
+    free(m);
 }

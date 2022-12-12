@@ -46,7 +46,7 @@ int main() {
     int *val, dim = 0;
     FILE *fp;
 
-    if((fp = fopen("../E2/hard_test_set.txt","r"))==  NULL){
+    if((fp = fopen("../hard_test_set.txt","r"))==  NULL){
         printf("Error opening file...");
         return 1;
     }

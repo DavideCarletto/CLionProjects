@@ -41,7 +41,7 @@ int main() {
         fscanf(fp,"%d",&dim);
     }
 
-    allocaVal(&val, dim);
+    allocaVal(&val, 4);
     leggiFile(fp, val, sol,&dim);
 
     free(val);

@@ -10,6 +10,7 @@ void allocaVertici(arco **elencoArchi, int E);
 void stampaArchi(arco *elencoArchi, int E);
 int powerset(int pos, int *elencoVertici, arco* elencoArchi, int *sol, int N ,int E, int start, int count);
 int check(int *elencoVertici, arco* elencoArchi, int N , int E);
+void dealloca(arco *elencoArchi, int *sol);
 
 int main() {
 
@@ -32,6 +33,8 @@ int main() {
     for(int i=0; i< N; i++) elencoVertici[i]=i;
 
     count = powerset(0,elencoVertici,elencoArchi,sol, N,E,0,count);
+
+    dealloca(elencoArchi, sol);
     return 0;
 }
 
@@ -105,3 +108,7 @@ int check(int *elencoVertici, arco* elencoArchi, int N , int E){ //faccio un vet
     return 1;
 }
 
+void dealloca(arco *elencoArchi, int *sol){
+    free(elencoArchi);
+    free(sol);
+}

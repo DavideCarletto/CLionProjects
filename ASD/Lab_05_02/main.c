@@ -16,7 +16,7 @@ void stampaTessere(tessera *elencoTessere, int T);
 void stampaCelle(cella **elencoCelle, int R, int C);
 void disp_semplici(int pos, int *mark, tessera *elencoTessere, cella **elencoCelle, cella **b_sol,int R, int C, int T, int c_max, int *b_max);
 int controlla(tessera *elencoTessere, cella **elencoCelle, int R, int C, int pos);
-int calcolaPuntaggio(tessera *elencoTessere, cella **elencoCelle, int R, int C);
+int calcolaPunteggio(tessera *elencoTessere, cella **elencoCelle, int R, int C);
 
 int main() {
     FILE *fp1, *fp2;
@@ -24,11 +24,11 @@ int main() {
     tessera *elencoTessere;
     cella **elencoCelle, **sol;
 
-    if((fp1 = fopen("../E2/tiles.txt","r"))==NULL){
+    if((fp1 = fopen("../tiles.txt","r"))==NULL){
         printf("Error opening file...");
         return 1;
     }
-    if((fp2 = fopen("../E2/board.txt","r"))==NULL){
+    if((fp2 = fopen("../board.txt","r"))==NULL){
         printf("Error opening file...");
         return 1;
     }
@@ -47,6 +47,9 @@ int main() {
 
     printf("Soluzione con punteggio massimo (%d):\n\n",max);
     stampaCelle(sol,R,C);
+
+    free(elencoTessere);
+    free(elencoCelle);
 
     return 0;
 }
@@ -111,7 +114,7 @@ void disp_semplici(int pos, int *mark, tessera *elencoTessere, cella **elencoCel
     int i, j;
 
     if(pos >= R*C){
-        if((c_max = calcolaPuntaggio(elencoTessere, elencoCelle, R,C))> *b_max){
+        if((c_max = calcolaPunteggio(elencoTessere, elencoCelle, R, C)) > *b_max){
             for(i=0; i<R;i++){
                 for(j=0; j<C;j++){
                     b_sol[i][j] = elencoCelle[i][j];
@@ -200,7 +203,7 @@ int controlla(tessera *elencoTessere, cella **elencoCelle, int R, int C, int pos
     return 1;
 }
 
-int calcolaPuntaggio(tessera *elencoTessere, cella **elencoCelle, int R, int C){
+int calcolaPunteggio(tessera *elencoTessere, cella **elencoCelle, int R, int C){
     int punteggioRighe=0, punteggioRiga=0, punteggioColonne=0,punteggioColonna=0, i,j, okRiga=1,okColonna=1, vT1, vT2;
     char cT2_p,cT1_p, cT2_c, cT1_c;
 

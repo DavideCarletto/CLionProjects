@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 typedef struct {
-    int si, fi
+    int si, fi;
 }att;
 
 void attSel(int N, att *v);
@@ -14,10 +14,10 @@ int intersec(att *v, int *sol, int n);
 
 int main() {
     FILE *fp;
-    att *v;
+    att *v= NULL;
     int dim;
 
-    if((fp = fopen("../E1/att.txt","r")) == NULL){
+    if((fp = fopen("../att.txt","r")) == NULL){
         printf("Error opening file...");
         return 1;
     }
@@ -61,13 +61,17 @@ void attSel(int N, att *v){
             printf("(%d %d)",v[i].si, v[i].fi);
     }
     printf("}, per una somma delle durate pari a %d.\n", b_max);
+
+    free(v);
+    free(b_sol);
+    free(sol);
 }
 
 void powerset (int pos, att *v, int* sol, int n ,int c_max, int *b_max, int *b_sol){
     int i;
 
     if(pos>=n){
-        if(!intersec(v, sol,n) && c_max >*b_max) {
+        if(!intersec(v, sol,n) && c_max >=*b_max) {
             for( i =0; i<n; i++)
                 b_sol[i] = sol[i];
             *b_max = c_max;

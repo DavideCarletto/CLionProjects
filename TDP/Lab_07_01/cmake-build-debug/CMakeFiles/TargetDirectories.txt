@@ -1,3 +1,3 @@
-C:/Users/Davide/CLionProjects/Lab_07_01/cmake-build-debug/CMakeFiles/Lab_07_01.dir
-C:/Users/Davide/CLionProjects/Lab_07_01/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/Davide/CLionProjects/Lab_07_01/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+C:/Users/Davide/CLionProjects/TDP/Lab_07_01/cmake-build-debug/CMakeFiles/Lab_07_01.dir
+C:/Users/Davide/CLionProjects/TDP/Lab_07_01/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/Davide/CLionProjects/TDP/Lab_07_01/cmake-build-debug/CMakeFiles/rebuild_cache.dir

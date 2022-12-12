@@ -84,21 +84,10 @@ int calcolaMax(int *val, int lenMax){
 
     m = malloc5d(val[0]+1, val[1]+1, val[2]+1, val[3]+1);
 
-    val[zaffiro]--;
-    maxPietre[zaffiro] = fZ(m,val, lenMax-1,0);
-    val[zaffiro]++;
-
-    val[rubino]--;
-    maxPietre[rubino] = fR(m,val, lenMax-1,0);
-    val[rubino]++;
-
-    val[topazio]--;
-    maxPietre[topazio] = fT(m,val, lenMax-1,0);
-    val[topazio]++;
-
-    val[smeraldo]--;
-    maxPietre[smeraldo] = fS(m,val, lenMax-1,0);
-    val[smeraldo]++;
+    maxPietre[zaffiro] = fZ(m,val, lenMax,0);
+    maxPietre[rubino] = fR(m,val, lenMax,0);
+    maxPietre[topazio] = fT(m,val, lenMax,0);
+    maxPietre[smeraldo] = fS(m,val, lenMax,0);
 
     dealloca5d(m,val[0]+1, val[1]+1, val[2]+1);
 
@@ -113,7 +102,8 @@ void allocaVal(int **val, int dim) {
 int fZ(int *****m, int *val, int len, int max){
     int maxZ=0, maxR=0;
 
-    if(m[zaffiro][val[zaffiro]][val[rubino]][val[topazio]][val[smeraldo]] != -1) return m[zaffiro][val[zaffiro]][val[rubino]][val[topazio]][val[smeraldo]];
+    if(m[zaffiro][val[zaffiro]][val[rubino]][val[topazio]][val[smeraldo]] != -1)
+        return m[zaffiro][val[zaffiro]][val[rubino]][val[topazio]][val[smeraldo]];
 
     if(len == 0)
         return 0;
@@ -123,42 +113,44 @@ int fZ(int *****m, int *val, int len, int max){
         maxZ = 1+fZ(m,val, len-1,max);
         maxR = 1+fR(m,val, len-1, max);
         val[zaffiro]++;
-
     }
+
     max = trovaMaggiore(maxZ,maxR);
     m[zaffiro][val[zaffiro]][val[rubino]][val[topazio]][val[smeraldo]] = max;
+
     return max;
 }
 
 int fR(int *****m, int *val, int len, int max){
     int maxS=0, maxT=0;
 
-    if(m[rubino][val[zaffiro]][val[rubino]][val[topazio]][val[smeraldo]] != -1) return m[rubino][val[zaffiro]][val[rubino]][val[topazio]][val[smeraldo]];
+    if(m[rubino][val[zaffiro]][val[rubino]][val[topazio]][val[smeraldo]] != -1)
+        return m[rubino][val[zaffiro]][val[rubino]][val[topazio]][val[smeraldo]];
 
     if(len == 0)
         return 0;
-
 
     if(val[rubino]>0){
         val[rubino]--;
         maxS = 1+fS(m,val, len-1,max);
         maxT = 1+fT(m,val, len-1, max);
         val[rubino]++;
-
     }
+
     max = trovaMaggiore(maxS,maxT);
     m[rubino][val[zaffiro]][val[rubino]][val[topazio]][val[smeraldo]] = max;
+
     return max;
 }
 
 int fT(int *****m, int *val, int len, int max){
     int maxZ=0, maxR=0;
 
-    if(m[topazio][val[zaffiro]][val[rubino]][val[topazio]][val[smeraldo]] != -1) return m[topazio][val[zaffiro]][val[rubino]][val[topazio]][val[smeraldo]];
+    if(m[topazio][val[zaffiro]][val[rubino]][val[topazio]][val[smeraldo]] != -1)
+        return m[topazio][val[zaffiro]][val[rubino]][val[topazio]][val[smeraldo]];
 
     if(len == 0)
         return 0;
-
 
     if(val[topazio]>0){
         val[topazio]--;
@@ -170,27 +162,29 @@ int fT(int *****m, int *val, int len, int max){
 
     max = trovaMaggiore(maxZ, maxR);
     m[topazio][val[zaffiro]][val[rubino]][val[topazio]][val[smeraldo]] = max;
+
     return max;
 }
 
 int fS(int *****m, int *val, int len, int max){
     int maxS=0, maxT=0;
 
-    if(m[smeraldo][val[zaffiro]][val[rubino]][val[topazio]][val[smeraldo]] != -1) return m[smeraldo][val[zaffiro]][val[rubino]][val[topazio]][val[smeraldo]];
+    if(m[smeraldo][val[zaffiro]][val[rubino]][val[topazio]][val[smeraldo]] != -1)
+        return m[smeraldo][val[zaffiro]][val[rubino]][val[topazio]][val[smeraldo]];
 
     if(len == 0)
         return 0;
-
 
     if(val[smeraldo]>0){
         val[smeraldo]--;
         maxS = 1+fS(m,val, len-1,max);
         maxT = 1+fT(m,val, len-1,max);
         val[smeraldo]++;
-
     }
+
     max = trovaMaggiore(maxS,maxT);
     m[smeraldo][val[zaffiro]][val[rubino]][val[topazio]][val[smeraldo]] = max;
+
     return max;
 }
 
@@ -200,6 +194,7 @@ int trovaMaggiore(int a, int b){
 
     return b;
 }
+
 int trovaMax(int *maxPietre){
     int max =0;
 
@@ -223,13 +218,18 @@ int *****malloc5d(int maxZ, int maxR, int maxT, int maxS){
             for ( r = 0; r < maxR; r++) {
                 m[i][z][r] = (int **) malloc(maxT*sizeof (int *));
                 for(t =0; t<maxT; t++){
-                    m[i][z][r][t] = (int *) malloc(maxS*sizeof (int));
+                    m[i][z][r][t] = (int *) malloc(maxS *sizeof (int));
                 }
             }
         }
     }
 
-    for(i=0; i<4;i++) for(z=0;z<maxZ;z++) for(r=0;r<maxR;r++) for(t=0;t<maxT;t++) for(s=0;s<maxS;s++) m[i][z][r][t][s]=-1;
+    for(i=0; i<4;i++)
+        for(z=0;z<maxZ;z++)
+            for(r=0;r<maxR;r++)
+                for(t=0;t<maxT;t++)
+                    for(s=0;s<maxS;s++)
+                        m[i][z][r][t][s]=-1;
 
     return m;
 }

@@ -7,5 +7,5 @@ typedef struct {
 }data_t;
 
 data_t DATAInit();
-
+char *DATAToString(data_t data);
 #endif //LAB_08_03_DATA_H

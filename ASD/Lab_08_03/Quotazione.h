@@ -6,8 +6,10 @@
 
 typedef struct{
     float val;
-    int n;
+    int nTitoli;
     data_t data;
 }quotazione_t;
 
+quotazione_t QUOTAZIONEInit();
+quotazione_t QUOTAZIONESetNull();
 #endif //LAB_08_03_QUOTAZIONE_H

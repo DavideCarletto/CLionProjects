@@ -1,7 +1,6 @@
 #include "TitoliList.h"
 #include "stdlib.h"
 #include "string.h"
-#include "Titolo.h"
 
 #define MAX_C 30
 
@@ -49,10 +48,19 @@ static link SortInList(link h, titolo_t titolo){
         return h;
     }
 
-    for(x = h->next, p=h; x!= NULL && strcmp(GETCodiceTitolo(h->titolo), GETCodiceTitolo(titolo))>0; p = x, x = x->next);
+    for(x = h->next, p=h; x!= NULL && strcmp(GETCodiceTitolo(titolo),GETCodiceTitolo(x->titolo))>0; p = x, x = x->next);
     p->next = NEWNode(titolo, x);
 
     return h;
+}
+
+static void CreaTitoliBST(link h){
+    link x;
+
+    for(x = h; x!= NULL; x=x->next){
+        quotazioneBST bst = TITOLOGetBST(x->titolo);
+        TITOLOBSTLoad(bst, x->titolo);
+    }
 }
 
 int TitoloInList(LIST list, char *codice){
@@ -86,6 +94,7 @@ void LISTLeggiTitoli(LIST list, FILE *fp){
             titolo = LISTGetTitoloByCodice(list, codice);
 
         TITOLOload(fp, titolo, dim_transiz);
+
     }
 }
 
@@ -104,4 +113,8 @@ void LISTPrint(LIST list){
     for(x = list->head; x!= NULL; x = x->next){
         TITOLOPrint(x->titolo);
     }
+}
+
+void LISTCreaTitoliBST(LIST list){
+    CreaTitoliBST(list->head);
 }

@@ -11,6 +11,5 @@ void LISTLeggiTitoli(LIST list, FILE *fp);
 int TitoloInList(LIST list, char *titolo);
 titolo_t LISTGetTitoloByCodice(LIST list, char *codice);
 void LISTPrint(LIST list);
-void LISTInsert(LIST list, titolo_t titolo);
-
+void LISTCreaTitoliBST(LIST list);
 #endif //LAB_08_03_TITOLILIST_H

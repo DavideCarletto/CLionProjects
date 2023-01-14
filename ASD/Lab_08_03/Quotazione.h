@@ -1,7 +1,6 @@
 #ifndef LAB_08_03_QUOTAZIONE_H
 #define LAB_08_03_QUOTAZIONE_H
 
-
 #include "Data.h"
 
 typedef struct{
@@ -12,4 +11,5 @@ typedef struct{
 
 quotazione_t QUOTAZIONEInit();
 quotazione_t QUOTAZIONESetNull();
+void QUOTAZIONEPrint(quotazione_t quotazione);
 #endif //LAB_08_03_QUOTAZIONE_H

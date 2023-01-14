@@ -1,5 +1,8 @@
 #include "Data.h"
 #include "stdio.h"
+#include "string.h"
+#include "stdlib.h"
+
 #define MAX_C 50
 
 data_t DATAInit(){
@@ -13,9 +16,14 @@ data_t DATAInit(){
 }
 
 char *DATAToString(data_t data){
-    char dataS[MAX_C];
+    char *dataS = malloc(MAX_C*sizeof (char));
 
-    sprintf(dataS,"%d/%2d/%d", data.anno,data.mese,data.giorno);
+    sprintf(dataS,"%d/%d/%d", data.anno,data.mese,data.giorno);
 
-    printf("%s",dataS);
+    return dataS;
 }
+
+int DATAcmp(data_t data1, data_t data2){
+    return strcmp(DATAToString(data1), DATAToString(data2));
+}
+

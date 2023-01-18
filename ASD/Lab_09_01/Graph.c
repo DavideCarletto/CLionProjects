@@ -236,12 +236,12 @@ int DAGrts(Graph D) {
             TSdfsR(D, v, ts, pre, &time);
         }
 
-        printf("\n");
-        printf("Ordine topologico del DAG:\n");
-        for (v=0; v < D->V; v++)
+    printf("\n");
+    printf("Ordine topologico del DAG:\n");
+    for (v=0; v < D->V; v++)
         printf("%s ", STGetNameByIndex(D->tab, ts[v]));
 
-        printf("\n\n");
+    printf("\n\n");
     return ts[0]; //prima sorgente
 }
 
@@ -251,11 +251,10 @@ void DAGGetLongestPath(Graph D, int source){
     ts=malloc((D->V)*sizeof(Graph));
     for (v=0; v < D->V; v++) { pre[v] = -1; ts[v] = -1; }
 
-    for (v=source; v < D->V; v++)
-        if (pre[v]== -1) {
-            TSdfsR(D, v, ts, pre, &time);
-            GRAPHspBF(D, v);
-        }
+    if (pre[source]== -1) {
+        TSdfsR(D, source, ts, pre, &time);
+        GRAPHspBF(D, source);
+    }
 
     for(v=0; v<D->V;v++) {
         if (pre[v] == -1) {
